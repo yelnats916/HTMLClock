@@ -1,0 +1,21 @@
+body {
+  font-family:"Arial";
+  color:blue;
+  text-align: center;
+  background-color: yellow;
+}
+
+.clockclass {
+  color:red;
+  font-size:24px;
+}
+
+#clock {
+  font-size:80px;
+  color:purple;
+}
+
+p {
+  color: green;
+  font-weight: bold;
+}
