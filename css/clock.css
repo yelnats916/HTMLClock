@@ -7,7 +7,26 @@ body {
 
 .clockclass {
   color:red;
-  font-size:24px;
+}
+
+.coldclass {
+  background-color:#95A5A6;
+}
+
+.chillyclass {
+  background-color:#1ABC9C;
+}
+
+.niceclass {
+  background-color:#2980B9;
+}
+
+.warmclass {
+  background-color:#E67E22;
+}
+
+.hotclass {
+  background-color:#E74C3C;
 }
 
 #clock {
