@@ -6,6 +6,7 @@
     <link href="css/clock.css" rel="stylesheet" type="text/css">
 	<link href="css/alarm.css" rel="stylesheet" type="text/css"/>
 	<script src="https://www.parsecdn.com/js/parse-1.3.4.min.js"></script>
+	<script src="https://apis.google.com/js/client:platform.js" async defer></script>
   </head>
   
   <body>
@@ -22,6 +23,16 @@
 		</div>
 		<div id="alarms"></div>
 	</div>
+	
+	<span id="signinButton">
+		<span class="g-signin"
+			data-callback="signinCallback"
+			data-clientid="269973190194-7loic6i9shr8jlht10ofije71te52elb.apps.googleusercontent.com"
+			data-cookiepolicy="single_host_origin"
+			data-requestvisibleactions="http://schema.org/AddAction"
+			data-scope="https://www.googleapis.com/auth/plus.login">
+		</span>
+	</span>
 	
 	<div id="mask" class="hide"> </div>
 	<div id="popup" class="hide">
@@ -60,9 +71,9 @@
 				<option>pm</option>
 			</select>
 		</div>
-		<div class="flexable">
-			<input type="button" value="Cancel" class="button" onclick="hideAlarmPopup()"/>
-			<input type="button" value="Set Alarm" class="button" onclick="addAlarm()"/>
+        <div class="flexable">
+            <input type="button" value="Cancel" class="button" onclick="hideAlarmPopup()"/>
+            <input id="addAlarm" type="button" value="Set Alarm" class="button"/>
 		</div>
 		<input type="text" id="alarmName" placeholder="Alarm Name"/>
 		

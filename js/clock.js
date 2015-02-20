@@ -1,7 +1,6 @@
 "use script"
 window.onload = getTime();
 window.onload = getTemp();
-window.onload = getAllAlarms();
 
 function getTime() {
   var clockDivElement = document.getElementById("clock");
@@ -80,22 +79,23 @@ function insertAlarm(hours, mins, ampm, alarmName) {
 	$("#alarms").append(deleteButton);	
 }
 
-function addAlarm() {
-	var hours = $("#hours option:selected").text();
-	var mins = $("#mins option:selected").text();
-	var ampm = $("#ampm option:selected").text();
-	var alarmName = $("#alarmName").val();
-	
-	
-	var AlarmObject = Parse.Object.extend("Alarm");
+function addAlarm(username) {
+        var hours = $("#hours option:selected").text();
+        var mins = $("#mins option:selected").text();
+        var ampm = $("#ampm option:selected").text();
+        var alarmName = $("#alarmName").val();
+
+
+        var AlarmObject = Parse.Object.extend("Alarm");
     var alarmObject = new AlarmObject();
-	alarmObject.save({"hours": hours, "mins": mins, "ampm": ampm, "alarmName": alarmName}, {
-		success: function(object) {
-			insertAlarm(hours, mins, ampm, alarmName);
-			hideAlarmPopup();
-		}
+        alarmObject.save({"hours": hours, "mins": mins, "ampm": ampm, "alarmName": alarmName, "username": username}, {
+                success: function(object) {
+                        insertAlarm(hours, mins, ampm, alarmName);
+                        hideAlarmPopup();
+                }
     });
 }
+
 
 function deleteAlarm(hours, mins, ampm, alarmName) {
 	var AlarmObject = Parse.Object.extend("Alarm");
@@ -120,24 +120,49 @@ function deleteAlarm(hours, mins, ampm, alarmName) {
 	$("#" + this.document.activeElement.alarmName).parent().parent().remove(); 
 }
 
-function getAllAlarms() {
-	$("#alarms").html("");
-	Parse.initialize("EKs3E7ICtmGoA5G8gLv9WJrYIsSnwwD1WTnMh9bZ", "mviQyXcG2mPvGlICGcfIMfb3eAVVeelqwvGP8OnS");
+function getAllAlarms(username) {
+        $("#alarms").html("");
+        Parse.initialize("EKs3E7ICtmGoA5G8gLv9WJrYIsSnwwD1WTnMh9bZ", "mviQyXcG2mPvGlICGcfIMfb3eAVVeelqwvGP8OnS");
 
-	var AlarmObject = Parse.Object.extend("Alarm");
-	var query = new Parse.Query(AlarmObject);
-	query.find({
-		success: function(results) {
-			console.log(results);
-			
-			for (var i = 0; i < results.length; i++) { 
-				insertAlarm(results[i].get("hours"),
-							results[i].get("mins"),
-							results[i].get("ampm"),
-							results[i].get("alarmName"));
-			}
-		}
-	});
+        var AlarmObject = Parse.Object.extend("Alarm");
+        var query = new Parse.Query(AlarmObject);
+        query.equalTo("username", username);
+        query.find({
+                success: function(results) {
+                        console.log(results);
+
+                        for (var i = 0; i < results.length; i++) {
+                                insertAlarm(results[i].get("hours"),
+                                                        results[i].get("mins"),
+                                                        results[i].get("ampm"),
+                                                        results[i].get("alarmName"));
+                        }
+                }
+        });
 }
+
+
+function signinCallback(authResult) {
+  if (authResult['status']['signed_in']) {
+     gapi.client.load('plus', 'v1', function() {
+        var request = gapi.client.plus.people.get({'userId': 'me'});
+        request.execute(function(resp) {
+          getAllAlarms(resp.id);
+          $("#addAlarm").on('click', function() {
+                addAlarm(resp.id)
+          });
+        });
+      });
+
+     document.getElementById('signinButton').setAttribute('style', 'display: none');
+  } else {
+    $('#alarms').children().remove()
+     //"user_signed_out" - User is signed-out
+    // "access_denied" - User denied access to your app
+    // "immediate_failed" - Could not automatically log in the user
+     console.log('Sign-in state: ' + authResult['error']);
+  }
+}
+
 
 setInterval(getTime, 100);
