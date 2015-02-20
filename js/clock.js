@@ -111,7 +111,6 @@ function deleteAlarm(hours, mins, ampm, alarmName) {
 			var toDelete = results[0];
 			toDelete.destroy({
 				success: function(toDelete) {				
-					getAllAlarms(); 
 				}
 			});
 		}
