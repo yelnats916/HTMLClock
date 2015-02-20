@@ -2,6 +2,8 @@
 window.onload = getTime();
 window.onload = getTemp();
 
+usr = "";
+
 function getTime() {
   var clockDivElement = document.getElementById("clock");
   var d = new Date();
@@ -110,7 +112,7 @@ function deleteAlarm(hours, mins, ampm, alarmName) {
 		success: function(results) {
 			var toDelete = results[0];
 			toDelete.destroy({
-				success: function(toDelete) {				
+				success: function(toDelete) {								getAllAlarms(usr);
 				}
 			});
 		}
@@ -146,6 +148,7 @@ function signinCallback(authResult) {
      gapi.client.load('plus', 'v1', function() {
         var request = gapi.client.plus.people.get({'userId': 'me'});
         request.execute(function(resp) {
+          usr = resp.id;
           getAllAlarms(resp.id);
           $("#addAlarm").on('click', function() {
                 addAlarm(resp.id)
