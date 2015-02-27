@@ -76,12 +76,15 @@ function insertAlarm(hours, mins, ampm, alarmName) {
 	var deleteButton = $("<input type=\"button\" value=\"Delete\">");
 	deleteButton.click(function() {
 		deleteAlarm(hours, mins, ampm, alarmName);
+		ga('send', 'event', 'Alarm', 'Delete');
 	});
 	
 	$("#alarms").append(deleteButton);	
 }
 
 function addAlarm(username) {
+	ga('send', 'event', 'Alarm', 'Add');
+
         var hours = $("#hours option:selected").text();
         var mins = $("#mins option:selected").text();
         var ampm = $("#ampm option:selected").text();
